@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitob Korrektori - AI Yordamchi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sarlavha -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-book-open-reader"></i>
+                <h1>Kitob Korrektori AI</h1>
+            </div>
+            <p>Matnlardagi imlo, tinish belgisi va uslubiy xatolarni avtomatik aniqlang</p>
+        </header>
+
+        <!-- Asosiy ishchi qism (Ikki ustunli) -->
+        <main class="workspace">
+            <!-- Chap tomon: Matn kiritish joyi -->
+            <section class="editor-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-pen-to-square"></i> Kitob matni (Asl nusxa)
+                </div>
+                <textarea id="sourceText" placeholder="Kitob matnini shu yerga kiriting yoki tashlang..."></textarea>
+                <button id="checkBtn" class="primary-btn">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Matnni tekshirish
+                </button>
+            </section>
+
+            <!-- O'ng tomon: AI tahlili va xatolar ro'yxati -->
+            <section class="analysis-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-clipboard-check"></i> AI Tahlili va Xatolar
+                </div>
+                <div class="analysis-results" id="analysisResults">
+                    <div class="placeholder-text">
+                        <i class="fa-solid fa-info-circle"></i>
+                        <p>Matn kiritib, "Matnni tekshirish" tugmasini bosing. AI xatolarni shu yerda ko'rsatadi.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- JavaScript - mantiq va interaktivlik uchun -->
+    <script>
+        const checkBtn = document.getElementById('checkBtn');
+        const sourceText = document.getElementById('sourceText');
+        const analysisResults = document.getElementById('analysisResults');
+
+        checkBtn.addEventListener('click', () => {
+            const text = sourceText.value.trim();
+            if (text === '') {
+                alert('Iltimos, tekshirish uchun matn kiriting!');
+                return;
+            }
+
+            // Tekshirilmoqda animatsiyasi
+            analysisResults.innerHTML = `
+                <div class="loading">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>AI matnni tahlil qilmoqda...</p>
+                </div>
+            `;
+
+            // Vaqtincha simulyatsiya (Kelgusida bu yerga haqiqiy AI API ulanadi)
+            setTimeout(() => {
+                analysisResults.innerHTML = `
+                    <div class="error-card">
+                        <div class="error-type">Imlo xatosi</div>
+                        <p class="error-desc"><b>"kelajakda"</b> so'zi qo'shib yozilishi kerak (matnda alohida yozilgan).</p>
+                        <div class="correction-box">Tavsiya: <span class="correct-word">kelajakda</span></div>
+                    </div>
+                    <div class="error-card">
+                        <div class="error-type warning">Tinish belgisi</div>
+                        <p class="error-desc">Gap oxirida vergul yoki nuqta tushib qolgan bo'lishi mumkin.</p>
+                        <div class="correction-box">Tavsiya: Nuqta qo'shish</div>
+                    </div>
+                    <div class="success-note">
+                        <i class="fa-solid fa-check-circle"></i> Jami 2 ta ehtimoliy xato topildi.
+                    </div>
+                `;
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
