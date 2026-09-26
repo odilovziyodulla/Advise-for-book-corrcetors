@@ -19,7 +19,7 @@
             <p>Matnlardagi imlo, tinish belgisi va uslubiy xatolarni avtomatik aniqlang</p>
         </header>
 
-        <!-- Asosiy ishchi qism (Ikki ustunli) -->
+        <!-- Asosiy ishchi qism -->
         <main class="workspace">
             <!-- Chap tomon: Matn kiritish joyi -->
             <section class="editor-section">
@@ -35,57 +35,91 @@
             <!-- O'ng tomon: AI tahlili va xatolar ro'yxati -->
             <section class="analysis-section">
                 <div class="section-title">
-                    <i class="fa-solid fa-clipboard-check"></i> AI Tahlili va Xatolar
+                    <i class="fa-solid fa-clipboard-check"></i> AI Tahlili va Xatolar Ro'yxati
                 </div>
                 <div class="analysis-results" id="analysisResults">
                     <div class="placeholder-text">
                         <i class="fa-solid fa-info-circle"></i>
-                        <p>Matn kiritib, "Matnni tekshirish" tugmasini bosing. AI xatolarni shu yerda ko'rsatadi.</p>
+                        <p>Matn kiritib, "Matnni tekshirish" tugmasini bosing. AI kiritgan matningizni tahlil qiladi.</p>
                     </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- JavaScript - mantiq va interaktivlik uchun -->
+    <!-- JavaScript - Xavfsiz ishga tushirish uchun -->
     <script>
-        const checkBtn = document.getElementById('checkBtn');
-        const sourceText = document.getElementById('sourceText');
-        const analysisResults = document.getElementById('analysisResults');
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkBtn = document.getElementById('checkBtn');
+            const sourceText = document.getElementById('sourceText');
+            const analysisResults = document.getElementById('analysisResults');
 
-        checkBtn.addEventListener('click', () => {
-            const text = sourceText.value.trim();
-            if (text === '') {
-                alert('Iltimos, tekshirish uchun matn kiriting!');
-                return;
-            }
+            checkBtn.addEventListener('click', () => {
+                const text = sourceText.value.trim();
+                
+                if (text === '') {
+                    alert('Iltimos, tekshirish uchun matn kiriting!');
+                    return;
+                }
 
-            // Tekshirilmoqda animatsiyasi
-            analysisResults.innerHTML = `
-                <div class="loading">
-                    <i class="fa-solid fa-spinner fa-spin"></i>
-                    <p>AI matnni tahlil qilmoqda...</p>
-                </div>
-            `;
-
-            // Vaqtincha simulyatsiya (Kelgusida bu yerga haqiqiy AI API ulanadi)
-            setTimeout(() => {
+                // Yuklanmoqda holati
                 analysisResults.innerHTML = `
-                    <div class="error-card">
-                        <div class="error-type">Imlo xatosi</div>
-                        <p class="error-desc"><b>"kelajakda"</b> so'zi qo'shib yozilishi kerak (matnda alohida yozilgan).</p>
-                        <div class="correction-box">Tavsiya: <span class="correct-word">kelajakda</span></div>
-                    </div>
-                    <div class="error-card">
-                        <div class="error-type warning">Tinish belgisi</div>
-                        <p class="error-desc">Gap oxirida vergul yoki nuqta tushib qolgan bo'lishi mumkin.</p>
-                        <div class="correction-box">Tavsiya: Nuqta qo'shish</div>
-                    </div>
-                    <div class="success-note">
-                        <i class="fa-solid fa-check-circle"></i> Jami 2 ta ehtimoliy xato topildi.
+                    <div class="loading">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <p>AI matningizni o'qib chiqmoqda...</p>
                     </div>
                 `;
-            }, 1500);
+
+                // Simulyatsiya va natija chiqarish
+                setTimeout(() => {
+                    const words = text.split(/\s+/);
+                    const detectedErrors = [];
+
+                    if (text.length < 20) {
+                        detectedErrors.push({
+                            type: "Uslubiy ogohlantirish",
+                            desc: `Kiritilgan matn juda qisqa. To'liqroq jumla kiriting.`,
+                            suggestion: "Matn hajmini oshiring",
+                            warning: true
+                        });
+                    } else {
+                        detectedErrors.push({
+                            type: "Imlo xatosi",
+                            desc: `"${words[0]}" so'zining bosh harfi yoki imlosini tekshiring.`,
+                            suggestion: words[0],
+                            warning: false
+                        });
+
+                        detectedErrors.push({
+                            type: "Tinish belgisi",
+                            desc: `Qo'shma gaplar orasidagi tinish belgilarini ko'rib chiqing.`,
+                            suggestion: "Vergul yoki nuqtani tekshiring",
+                            warning: true
+                        });
+
+                        detectedErrors.push({
+                            type: "Uslubiy tavsiya",
+                            desc: `Jumla tuzilishi biroz murakkab.`,
+                            suggestion: "Sodda jumlalarga bo'lish tavsiya etiladi",
+                            warning: false
+                        });
+                    }
+
+                    let htmlContent = `<div class="success-note"><i class="fa-solid fa-check-circle"></i> Tahlil yakunlandi. Jami ${detectedErrors.length} ta tavsiya topildi:</div>`;
+
+                    detectedErrors.forEach((err, index) => {
+                        htmlContent += `
+                            <div class="error-card">
+                                <div class="error-type ${err.warning ? 'warning' : ''}">Tavsiya #${index + 1}: ${err.type}</div>
+                                <p class="error-desc">${err.desc}</p>
+                                <div class="correction-box">Tavsiya: <span class="correct-word">${err.suggestion}</span></div>
+                            </div>
+                        `;
+                    });
+
+                    analysisResults.innerHTML = htmlContent;
+                }, 1200);
+            });
         });
     </script>
 </body>
